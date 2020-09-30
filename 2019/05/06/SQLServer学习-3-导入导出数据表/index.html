@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="SQLServer学习(3)导入导出数据表 [ GoodNight ] "><meta name="theme-color" content="#ebc65a"><title>SQLServer学习(3)导入导出数据表 [ GoodNight ] </title><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-171806323-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-171806323-1');</script><link rel="stylesheet" href="/css/tocbot.css"><script src="/js/tocbot.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">GoodNight</a></h1><p>Take A Rest</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">SQLServer学习(3)导入导出数据表</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href="">SQLServer学习(3)导入导出数据表</a></h2><span class="post__date">2019-05-06</span><a href="/tags/SQL-Server/"><span class="post__tags">#SQL Server</span></a></div></div><div class="article__content"><p>之前我的一些有关于SQLServer学习的文章：</p>
+<p><a href="http://spyxxx.xyz/2019/04/10/SQLServer%E5%AD%A6%E4%B9%A0-1-%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%89%E8%A3%85/" target="_blank" rel="noopener">SQL Server学习(1)介绍与安装</a></p>
+<p><a href="http://spyxxx.xyz/2019/04/23/SQLServer%E5%AD%A6%E4%B9%A0-2-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E6%95%B0%E6%8D%AE%E8%A1%A8/" target="_blank" rel="noopener">SQL Server学习(2)创建数据库和数据表</a></p>
+<p>我的配置：</p>
+<ul>
+<li><p>操作系统：Window10 x64</p>
+</li>
+<li><p>SQL Server 2016</p>
+</li>
+</ul>
+<p>这篇文章将介绍如何Excel表格的数据导入数据表和数据表中的数据如何导出到Excel表格里。</p>
+<hr>
+<h1 id="导入数据表"><a href="#导入数据表" class="headerlink" title="导入数据表"></a>导入数据表</h1><p>SQL Server将外部数据导入数据表中有如下几种操作方式：</p>
+<ul>
+<li><strong>手动输入</strong>:直接将数据输入到数据库即可；</li>
+<li><strong>使用复制/粘贴功能</strong>:从其他来源的数据复制，然后粘贴到数据库中的表；</li>
+<li><strong>直接导入</strong>:可以使用导入和导出向导从另一个源导入数据；</li>
+<li><strong>使用SQL脚本</strong>:可以运行一个包含所有数据插入的SQL脚本；</li>
+<li><strong>应用/网站</strong>: 通过应用程序或网站更新数据库。</li>
+</ul>
+<p><strong>下面介绍直接导入方式和使用SQL脚本方式：</strong></p>
+<h2 id="直接导入：Excel表格导入到数据表"><a href="#直接导入：Excel表格导入到数据表" class="headerlink" title="直接导入：Excel表格导入到数据表"></a>直接导入：Excel表格导入到数据表</h2><p>准备工作：</p>
+<ul>
+<li><p>一个存有数据的Excel表格</p>
+</li>
+<li><p>建好的数据库</p>
+</li>
+</ul>
+<p>如图，Excel表格里的内容。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_1.png?raw=true" alt=""></p>
+<p>在“对象资源管理器”部分，对需要导入Excel表格的数据库<strong>单击右键——任务——导入数据</strong>，如图。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_2.png?raw=true" alt=""></p>
+<p>按照以下图片一步步走。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_3.png?raw=true" alt=""></p>
+<p>第二步，<strong>选择数据源界面。数据源选择“Microsoft Excel”，Excel文件路径选择要导入的Excel文件，Excel版本选择本机有的版本</strong>，我选了“Microsoft Excel 97-2003”，因为我的Excel文件中首行存在列名称，所以勾选“首行包含列名称”，根据个人情况而定。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_4.png?raw=true" alt=""></p>
+<p>第三步，<strong>选择目标界面。目标选择“SQL Server Native Client”，服务器名称，身份验证根据个人情况而定，数据库的选择就是刚刚对其单击右键的数据库，也可以修改成别的数据库</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_5.png?raw=true" alt=""></p>
+<p>第四步，<strong>选择“复制一个或多个表或视图的数据”</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_6.png?raw=true" alt=""></p>
+<p>第五步，<strong>此处显示了SQL Server将会建一个新的表名为“Sheet1$”，继续下一步</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_7.png?raw=true" alt=""></p>
+<p>第六步，<strong>勾选“立即运行”，继续下一步</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_8.png?raw=true" alt=""></p>
+<p>第七步，<strong>点击完成，然后就开始导入操作</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_9.png?raw=true" alt=""></p>
+<p>第八步，<strong>操作信息会显示出来，操作成功后，关闭</strong>即可。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_10.png?raw=true" alt=""></p>
+<p>最后，回去<strong>刷新</strong>一下“对象资源管理器”，就会看见一个新建好的表“Sheet1$”，<strong>单击右键——选择“编辑前200行”</strong>，就可以在旁边看到刚刚导入进去的数据了。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_11.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_12.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_13.png?raw=true" alt=""></p>
+<h2 id="使用SQL脚本导入数据表"><a href="#使用SQL脚本导入数据表" class="headerlink" title="使用SQL脚本导入数据表"></a>使用SQL脚本导入数据表</h2><p>SQL脚本可以通过INSERT INTO语句将数据插入数据表，这里介绍的是<strong>如何用SQL把数据表导入到txt文件</strong>。</p>
+<p>准备工作：</p>
+<ul>
+<li>存有数据的文本文件</li>
+<li>一个数据表</li>
+</ul>
+<p>首先新建一个SQL查询脚本，以windows身份验证。如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_27.png?raw=true" alt=""></p>
+<p>在脚本中写如下语句：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 启用xp_cmdshell</span><br>exec sp_configure 'xp_cmdshell',1<br><span class="hljs-comment">-- 重新配置 </span><br>reconfigure<br>EXEC master..xp_cmdshell 'BCP  test2.dbo.test in D:\sqlServerExp\test.txt -c -t -T'<br></code></pre></td></tr></table></figure>
+
+<p>引用网上介绍：</p>
+<blockquote>
+<p><strong>bcp</strong> 实用工具可以在 Microsoft SQL Server 实例和用户指定格式的数据文件间大容量复制数据。  使用 <strong>bcp</strong> 实用工具可以将大量新行导入 SQL Server 表，或将表数据导出到数据文件。 除非与 <strong>queryout</strong> 选项一起使用，否则使用该实用工具不需要了解 Transact-SQL 知识。 若要将数据导入表中，必须使用为该表创建的格式文件，或者必须了解表的结构以及对于该表中的列有效的数据类型。</p>
+</blockquote>
+<blockquote>
+<p>BCP可以执行的4种操作:</p>
+<p><strong>(1) 导入</strong> 这个动作使用in命令完成，后面跟需要导入的文件名。 </p>
+<p><strong>(2) 导出</strong> 这个动作使用out命令完成，后面跟需要导出的文件名。 </p>
+<p><strong>(3) 使用SQL语句导出</strong> 这个动作使用queryout命令完成，它跟out类似，只是数据源不是表或视图名，而是SQL语句。 </p>
+<p><strong>(4) 导出格式文件</strong> 这个动作使用format命令完成，后而跟格式文件名。</p>
+</blockquote>
+<p>常用参数：</p>
+<blockquote>
+<p><strong>-f format_file</strong><br>format_file表示格式文件名。这个选项依赖于上述的动作，如果使用的是in或out，format_file表示已经存在的格式文件，如果使用的是format则表示是要生成的格式文件。</p>
+<p><strong>-x</strong><br>这个选项要和-f format_file配合使用，以便生成xml格式的格式文件。</p>
+<p><strong>-F first_row</strong><br>指定从被导出表的哪一行导出，或从被导入文件的哪一行导入。</p>
+<p><strong>-L last_row</strong><br>指定被导出表要导到哪一行结束，或从被导入文件导数据时，导到哪一行结束。</p>
+<p><strong>-c</strong><br>使用char类型做为存储类型，没有前缀且以”\t”做为字段分割符，以”\n”做为行分割符。</p>
+<p><strong>-w</strong><br>和-c类似，只是当使用Unicode字符集拷贝数据时使用，且以nchar做为存储类型。</p>
+<p><strong>-t field_term</strong><br>指定字符分割符，默认是”\t”。</p>
+<p><strong>-r row_term</strong><br>指定行分割符，默认是”\n”。 </p>
+<p><strong>-S server_name[ \instance_name]</strong><br>指定要连接的SQL Server服务器的实例，如果未指定此选项，BCP连接本机的SQL Server默认实例。如果要连接某台机器上的默认实例，只需要指定机器名即可。 </p>
+<p><strong>-U login_id</strong><br>指定连接SQL Sever的用户名。</p>
+<p><strong>-P password</strong><br>指定连接SQL Server的用户名密码。</p>
+<p><strong>-T</strong><br>指定BCP使用信任连接登录SQL Server。如果未指定-T，必须指定-U和-P。</p>
+<p><strong>-k</strong><br>指定空列使用null值插入，而不是这列的默认值。</p>
+</blockquote>
+<p><strong>其中“test2.dbo.test”是省略了服务器名的对象限定名，即“数据库名.数据库架构名.对象名”</strong>，根据实际情况更改即可。</p>
+<p><strong>“D:\sqlServerExp\test.txt”为需要导入的txt文本文件</strong>。</p>
+<p>如图，执行成功。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_29.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_30.png?raw=true" alt=""></p>
+<h1 id="导出数据表"><a href="#导出数据表" class="headerlink" title="导出数据表"></a>导出数据表</h1><h2 id="数据表导出到Excel表格"><a href="#数据表导出到Excel表格" class="headerlink" title="数据表导出到Excel表格"></a>数据表导出到Excel表格</h2><p>准备工作：</p>
+<ul>
+<li><p>存有数据的数据表</p>
+</li>
+<li><p>空的Excel表格（也不一定要空的）</p>
+</li>
+</ul>
+<p>基本操作和上文的“直接导入：Excel表格导入到数据表”内容相似。</p>
+<p>在“对象资源管理器”部分，对需要导入Excel表格的数据库<strong>单击右键——任务——导出数据</strong>，如图。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_14.png?raw=true" alt=""></p>
+<p>第二步，<strong>选择数据源界面。数据源选择“SQL Server Native Client”，服务器名称，身份验证根据个人情况而定，数据库的选择就是刚刚对其单击右键的数据库，也可以修改成别的数据库</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_15.png?raw=true" alt=""></p>
+<p>第三步，<strong>选择目标界面。目标选择“Microsoft Excel”，Excel文件路径选择要导入的Excel文件，Excel版本选择本机有的版本</strong>，我选了“Microsoft Excel 97-2003”，因为我的Excel文件中首行存在列名称，所以勾选“首行包含列名称”，根据个人情况而定。由图可见，我选择的“test.xls”是一个空的表。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_16.png?raw=true" alt=""></p>
+<p>第四步，<strong>选择“复制一个或多个表或视图的数据”</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_17.png?raw=true" alt=""></p>
+<p>第五步，<strong>此处显示了SQL Server将会建一个新的表名为“test”，继续下一步</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_18.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_19.png?raw=true" alt=""></p>
+<p>第六步，<strong>勾选“立即运行”，继续下一步</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_20.png?raw=true" alt=""></p>
+<p>第七步，<strong>点击完成，然后就开始导出操作</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_21.png?raw=true" alt=""></p>
+<p>第八步，<strong>操作信息会显示出来，操作成功后，关闭</strong>即可。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_22.png?raw=true" alt=""></p>
+<p>最后，返回去找test.xls文件，可以看到该文件新建了一个与数据表同名的工作表，里面导出的数据正确。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_23.png?raw=true" alt=""></p>
+<h2 id="使用SQL脚本导出数据表"><a href="#使用SQL脚本导出数据表" class="headerlink" title="使用SQL脚本导出数据表"></a>使用SQL脚本导出数据表</h2><p>这里介绍如何用SQL把数据表导出到txt文件。</p>
+<p>准备工作：</p>
+<ul>
+<li>存有数据的数据表</li>
+</ul>
+<p>在脚本中写如下语句，<strong>只要将上文中导入的命令“in”改为“out”即可</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 启用xp_cmdshell</span><br>exec sp_configure 'xp_cmdshell',1<br><span class="hljs-comment">-- 重新配置 </span><br>reconfigure<br>EXEC master..xp_cmdshell 'BCP  test2.dbo.test out D:\sqlServerExp\test.txt -c -t -T'<br></code></pre></td></tr></table></figure>
+
+
+
+<p>**其中“test2.dbo.test”是省略了服务器名的对象限定名，即“数据库名.数据库架构名.对象名”，根据实际情况更改即可。</p>
+<p>“D:\sqlServerExp\test.txt”为导出文件位置**。</p>
+<p>如图，执行成功。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_28.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-3_31.png?raw=true" alt=""></p>
+<hr>
+<p>参考连接：</p>
+<p><a href="https://www.cnblogs.com/zerocc/p/3225723.html" target="_blank" rel="noopener">使用BCP导出导入数据</a></p>
+<hr>
+<p>初学，可能写的一些地方不对，欢迎指出。</p>
+<p>如有问题，可以在评论区里讨论。如需转载，请注明出处，谢谢。</p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/GoodNight-Git" target="_blank" rel="noopener">Github</a></li><li><a href="https://juejin.im/user/5cb1ed9b5188251b090acc5c" target="_blank" rel="noopener">掘金</a></li><li><a href="mailto:goodnightlilanhui@gmail.com">Mail</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a></li></ul></div><h2>Categories</h2><div class="sidebar__categories"><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/about/">about</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/notes/">notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/plans/">plans</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/projects/">projects</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Axios/" rel="tag">Axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding-net/" rel="tag">Coding.net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingThinking/" rel="tag">CodingThinking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Color/" rel="tag">Color</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/" rel="tag">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kali-2-0/" rel="tag">Kali 2.0</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keycloak/" rel="tag">Keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Web/" rel="tag">Python Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL-Server/" rel="tag">SQL Server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/" rel="tag">Translation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/" rel="tag">UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">Ubuntu系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VUE/" rel="tag">VUE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win10/" rel="tag">Win10</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keycloak/" rel="tag">keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/taro/" rel="tag">taro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E6%8E%A8/" rel="tag">内推</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%92%E6%AD%A6%E7%BA%AA%E9%A1%B9%E7%9B%AE/" rel="tag">寒武纪项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E7%AB%99/" rel="tag">建站</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" rel="tag">碎碎念</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2019/05/12/docker%E9%83%A8%E7%BD%B2mysql%E5%B9%B6%E6%8F%90%E4%BE%9B%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AE%BF%E9%97%AE/">docker部署mysql并提供客户端访问</a><a class="next-button" href="/2019/04/23/SQLServer%E5%AD%A6%E4%B9%A0-2-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E6%95%B0%E6%8D%AE%E8%A1%A8/">SQLServer学习(2)创建数据库和数据表</a></div></div></div></div><div class="footer"><span>©️2019-2020 </span><p>Designed By&nbsp;<strong><a href="https://github.com/random-yang" target="_blank" rel="noopener">RandomYang</a></strong></p><p>Changed By<strong><a href="http://www.goodnight.wiki" target="_blank" rel="noopener">GoodNight</a></strong></p><p>Powered By&nbsp;<strong><a href="https://hexo.io" target="_blank" rel="noopener">hexo</a></strong></p><p><div id="beian"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61019002001135" target="_blank" rel="noopener"><img src="../img/beian.png"><span>陕公网安备 61019002001135号&nbsp;</span></a></div><div id="tengxun"><a href="http://beian.miit.gov.cn" target="_blank" rel="noopener">陕ICP备20010639号</a></div></p></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

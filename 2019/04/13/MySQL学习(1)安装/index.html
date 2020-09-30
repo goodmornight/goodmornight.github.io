@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="MySQL学习(1)安装 [ GoodNight ] "><meta name="theme-color" content="#ebc65a"><title>MySQL学习(1)安装 [ GoodNight ] </title><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-171806323-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-171806323-1');</script><link rel="stylesheet" href="/css/tocbot.css"><script src="/js/tocbot.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">GoodNight</a></h1><p>Take A Rest</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">MySQL学习(1)安装</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href="">MySQL学习(1)安装</a></h2><span class="post__date">2019-04-13</span><a href="/tags/MySQL/"><span class="post__tags">#MySQL</span></a></div></div><div class="article__content"><p>因为学习需要，刚安装完SQL Server，现在又跑来安装MySQL。我记得我很久以前安装，貌似是5.7版本的，可能之前重装过系统，被我弄没了，重新装一个吧。</p>
+<p>我的配置：</p>
+<ul>
+<li>操作系统：Window10 x64</li>
+<li>MySQL8.0.15（解压版）</li>
+</ul>
+<p>以下内容均为我学习MySQL的笔记，可能有摘抄的（我会标明出处），可能也有自己写的。</p>
+<hr>
+<h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><p><a href="https://dev.mysql.com/downloads/" target="_blank" rel="noopener">MySQL Community下载</a></p>
+<p>如图选择：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_1.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_2.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_3.png?raw=true" alt=""></p>
+<p>正常网速下载会比较慢，还容易出错，因此我开了VPN。</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><h2 id="添加环境变量（非必须）"><a href="#添加环境变量（非必须）" class="headerlink" title="添加环境变量（非必须）"></a>添加环境变量（非必须）</h2><p>下载好后，你可以把它解压到你想要放的位置。然后该mysql的bin的路径到环境变量（但这个是非必须的，只是方便你未来用cmd打开mysql）。</p>
+<h2 id="编写my-ini"><a href="#编写my-ini" class="headerlink" title="编写my.ini"></a>编写my.ini</h2><p>然后返回到mysql的根目录，新建一个txt文档，将其改名为my.ini（后缀自然也是改了）。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_4.png?raw=true" alt=""></p>
+<p>再用notepad++或记事本打开my.ini，往里面添加如下代码：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">[mysqld]<br><br><span class="hljs-comment"># 这是你的mysql的路径</span><br>basedir=D:\mysql-8.0.15-winx64<br><br><span class="hljs-comment"># 确定data的位置，一会配置 data 这个文件夹 </span><br>datadir=D:\mysql-8.0.15-winx64\data<br><br><span class="hljs-comment">#默认端口，无需更改</span><br>port = 3306<br></code></pre></td></tr></table></figure>
+
+<h2 id="配置data文件"><a href="#配置data文件" class="headerlink" title="配置data文件"></a>配置data文件</h2><p>进入D:\mysql-8.0.15-winx64\bin（根据你的实际情况而定），按住<strong>shift+单击右键</strong>，选择“<strong>在此处打开PowerShell窗口</strong>”（你也可以正常的以管理员身份打开cmd.exe，进入该目录D:\mysql-8.0.15-winx64\bin），</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_5.png?raw=true" alt=""></p>
+<p>然后输入</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment"># 配置 mysql 服务，默认用户名为：root ，默认密码为空</span><br><span class="hljs-comment">#如果你是用cmd打开的话</span><br>mysqld -<span class="hljs-literal">-initialize</span><span class="hljs-literal">-insecure</span><br><span class="hljs-comment">#如果你是用PowerShell打开的话，前面加上.\</span><br>.\mysqld -<span class="hljs-literal">-initialize</span><span class="hljs-literal">-insecure</span><br></code></pre></td></tr></table></figure>
+
+<p>稍等片刻就好。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_6.png?raw=true" alt=""></p>
+<h2 id="最后，在服务中加入MySQL服务"><a href="#最后，在服务中加入MySQL服务" class="headerlink" title="最后，在服务中加入MySQL服务"></a>最后，在服务中加入MySQL服务</h2><p>输入：</p>
+<figure class="highlight powershell"><table><tr><td class="code"><pre><code class="hljs powershell"><span class="hljs-comment">#如果你是用cmd打开的话</span><br>mysqld -<span class="hljs-literal">-install</span> MySQL<br><span class="hljs-comment">#如果你是用PowerShell打开的话，前面加上.\</span><br>.\mysqld -<span class="hljs-literal">-install</span> MySQL<br></code></pre></td></tr></table></figure>
+
+<p>成功如图：（图一是在cmd成功图，图二是在powershell成功图）</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_8.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_7.png?raw=true" alt=""></p>
+<h1 id="启动MySQL"><a href="#启动MySQL" class="headerlink" title="启动MySQL"></a>启动MySQL</h1><p>如果你已经把D:\mysql-8.0.15-winx64\bin加入环境变量里了，你可以<strong>以管理员身份打开cmd</strong>，输入</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">net start mysql<br></code></pre></td></tr></table></figure>
+
+<p>启动成功，如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_9.png?raw=true" alt=""></p>
+<p>如果你出现如下<strong>报错</strong>：</p>
+<p><strong>发生系统错误5</strong></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_10.png?raw=true" alt=""></p>
+<p>原因就是<strong>你没有以管理员身份打开cmd</strong>。</p>
+<p>然后登录，输入</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">mysql -u root -p</span><br></code></pre></td></tr></table></figure>
+
+<p>root用户默认密码为空。</p>
+<p>如图，<strong>成功</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_1_11.png?raw=true" alt=""></p>
+<h1 id="if-你想装两个版本的MySQL"><a href="#if-你想装两个版本的MySQL" class="headerlink" title="if 你想装两个版本的MySQL"></a>if 你想装两个版本的MySQL</h1><p>没错，就像我一样，突然发现学长要求的mysql的版本是5.7，我只好把我之前下载好的mysql重新配置一下。</p>
+<p>还是同上把你下载好的zip文件，<strong>解压到你想要放的位置</strong>。因为我以前就配过，但换了一个地方，也忘了我之前的数据库密码，所以在调整一下。</p>
+<p><strong>删掉之前的data文件</strong> ，然后，<strong>更改my.ini里的内容</strong>，</p>
+<ul>
+<li><p><strong>port //port端口因为之前，3306用过了，所以我改成了3307</strong></p>
+</li>
+<li><p><strong>basedir //根据实际</strong></p>
+</li>
+<li><p><strong>datadir //根据实际</strong></p>
+</li>
+</ul>
+<p>然后用<strong>管理员身份</strong>打开cmd，<strong>进入mysql5.7的bin文件夹</strong>，</p>
+<p><strong>安装mysql服务</strong>，为了防止重复，<strong>指定该mysql5.7服务名为mysql2</strong>，</p>
+<p>服务安装成功后，就开始<strong>初始化数据库</strong>。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">mysqld --initialize<br></code></pre></td></tr></table></figure>
+
+<p>成功后不会有任何提示，但<strong>根目录会增加新的data文件夹</strong>。</p>
+<p>然后，<strong>打开注册表</strong>，找到<strong>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\mysql2,修改ImagePath参数，更正mysql2服务相关路径</strong>。（至于打开注册表的方式有很多，<strong>打开计算机，进入系统所在盘，进入Windows文件夹，进入System32文件夹，找到regedt.exe程序</strong>，双击打开，就是其中的一个方法），如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_2_1.png?raw=true" alt=""></p>
+<p>接下来启动mysql服务器：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">net start mysql2<br></code></pre></td></tr></table></figure>
+
+<p><strong>mysql2服务启动后，去data/xxx.err文件中找到临时密码</strong>，进行登录。如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/mysql/mysql_figure_2_2.png?raw=true" alt=""></p>
+<p><strong>使用临时密码进行登录(tip:-P是端口，-p是密码,建议-p后直接敲回车，这样输入的密码就不会显示出来)</strong></p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">mysql</span> -P3307 -uroot -p<br></code></pre></td></tr></table></figure>
+
+<p>修改密码,双引号里的密码你可以为空，也可以自定。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><code class="hljs mysql">mysql&gt; set password for root@localhost&#x3D;password(&#39;&#39;);<br></code></pre></td></tr></table></figure>
+
+<p><strong>使用quit或exit或\q退出，再用新密码登录mysql客户端。</strong></p>
+<p>顺便加一句，要退出mysql服务器，就写</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">net stop mysql2<br></code></pre></td></tr></table></figure>
+
+<p>参考链接：</p>
+<p><a href="https://blog.csdn.net/wudinaniya/article/details/82455431#commentBox" target="_blank" rel="noopener">windows上同时安装两个版本的mysql数据库</a></p>
+<p>——更新于2019.4.19</p>
+<hr>
+<p>如有问题，可以在评论区里讨论。如需转载，请注明出处，谢谢。</p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/GoodNight-Git" target="_blank" rel="noopener">Github</a></li><li><a href="https://juejin.im/user/5cb1ed9b5188251b090acc5c" target="_blank" rel="noopener">掘金</a></li><li><a href="mailto:goodnightlilanhui@gmail.com">Mail</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a></li></ul></div><h2>Categories</h2><div class="sidebar__categories"><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/about/">about</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/notes/">notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/plans/">plans</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/projects/">projects</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Axios/" rel="tag">Axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding-net/" rel="tag">Coding.net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingThinking/" rel="tag">CodingThinking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Color/" rel="tag">Color</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/" rel="tag">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kali-2-0/" rel="tag">Kali 2.0</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keycloak/" rel="tag">Keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Web/" rel="tag">Python Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL-Server/" rel="tag">SQL Server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/" rel="tag">Translation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/" rel="tag">UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">Ubuntu系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VUE/" rel="tag">VUE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win10/" rel="tag">Win10</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keycloak/" rel="tag">keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/taro/" rel="tag">taro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E6%8E%A8/" rel="tag">内推</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%92%E6%AD%A6%E7%BA%AA%E9%A1%B9%E7%9B%AE/" rel="tag">寒武纪项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E7%AB%99/" rel="tag">建站</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" rel="tag">碎碎念</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2019/04/23/SQLServer%E5%AD%A6%E4%B9%A0-2-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E6%95%B0%E6%8D%AE%E8%A1%A8/">SQLServer学习(2)创建数据库和数据表</a><a class="next-button" href="/2019/04/10/SQLServer%E5%AD%A6%E4%B9%A0-1-%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%89%E8%A3%85/">SQL Server学习(1)介绍与安装</a></div></div></div></div><div class="footer"><span>©️2019-2020 </span><p>Designed By&nbsp;<strong><a href="https://github.com/random-yang" target="_blank" rel="noopener">RandomYang</a></strong></p><p>Changed By<strong><a href="http://www.goodnight.wiki" target="_blank" rel="noopener">GoodNight</a></strong></p><p>Powered By&nbsp;<strong><a href="https://hexo.io" target="_blank" rel="noopener">hexo</a></strong></p><p><div id="beian"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61019002001135" target="_blank" rel="noopener"><img src="../img/beian.png"><span>陕公网安备 61019002001135号&nbsp;</span></a></div><div id="tengxun"><a href="http://beian.miit.gov.cn" target="_blank" rel="noopener">陕ICP备20010639号</a></div></p></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

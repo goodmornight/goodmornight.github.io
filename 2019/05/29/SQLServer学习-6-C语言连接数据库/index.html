@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="SQLServer学习(6)C语言连接数据库 [ GoodNight ] "><meta name="theme-color" content="#ebc65a"><title>SQLServer学习(6)C语言连接数据库 [ GoodNight ] </title><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-171806323-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-171806323-1');</script><link rel="stylesheet" href="/css/tocbot.css"><script src="/js/tocbot.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">GoodNight</a></h1><p>Take A Rest</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">SQLServer学习(6)C语言连接数据库</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href="">SQLServer学习(6)C语言连接数据库</a></h2><span class="post__date">2019-05-29</span><a href="/tags/SQL-Server/"><span class="post__tags">#SQL Server</span></a><a href="/tags/C/"><span class="post__tags">#C</span></a></div></div><div class="article__content"><p>之前我的一些有关于SQLServer学习的文章：</p>
+<p><a href="http://spyxxx.xyz/2019/04/10/SQLServer%E5%AD%A6%E4%B9%A0-1-%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%89%E8%A3%85/" target="_blank" rel="noopener">SQL Server学习(1)介绍与安装</a></p>
+<p><a href="http://spyxxx.xyz/2019/04/23/SQLServer%E5%AD%A6%E4%B9%A0-2-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E6%95%B0%E6%8D%AE%E8%A1%A8/" target="_blank" rel="noopener">SQL Server学习(2)创建数据库和数据表</a></p>
+<p><a href="http://www.spyxxx.xyz/2019/05/06/SQLServer%E5%AD%A6%E4%B9%A0-3-%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA%E6%95%B0%E6%8D%AE%E8%A1%A8/" target="_blank" rel="noopener">SQLServer学习(3)导入导出数据表</a></p>
+<p><a href="http://www.spyxxx.xyz/2019/05/14/SQLServer%E5%AD%A6%E4%B9%A0-4-%E7%BB%99%E6%95%B0%E6%8D%AE%E5%BA%93%E3%80%81%E8%A1%A8%E7%94%9F%E6%88%90SQL%E8%84%9A%E6%9C%AC/" target="_blank" rel="noopener">SQLServer学习(4)给数据库、表生成SQL脚本</a></p>
+<p><a href="http://www.spyxxx.xyz/2019/05/29/SQLServer%E5%AD%A6%E4%B9%A0-5-%E4%B8%BASQLServer%E5%88%9B%E5%BB%BA%E7%99%BB%E5%BD%95%E8%B4%A6%E6%88%B7/" target="_blank" rel="noopener">SQLServer学习(5)为SQLServer创建登录账户</a></p>
+<p>我的配置：</p>
+<ul>
+<li>操作系统：Window10 x64</li>
+<li>SQL Server 2016</li>
+<li>IDE：Visual Studio 2017</li>
+</ul>
+<p>这篇文章将介绍如何用C语言连接SQLServer并显示数据表中的数据。</p>
+<hr>
+<h1 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h1><h2 id="启动SQLServer服务"><a href="#启动SQLServer服务" class="headerlink" title="启动SQLServer服务"></a>启动SQLServer服务</h2><p>1.先<strong>查看SQLServer在本机对应的服务名称。</strong></p>
+<p><strong>“Shift+Ctrl+Esc”打开任务管理器-&gt;服务-&gt;找到SQLServer对应的服务名称</strong>，如图。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_1.png?raw=true" alt=""></p>
+<p>可以看到MSSQLSERVER服务正在启动状态，但<strong>如果在停止状态，可以以管理员身份打开cmd，输入</strong></p>
+<figure class="highlight dos"><table><tr><td class="code"><pre><code class="hljs dos"><span class="hljs-built_in">net</span> <span class="hljs-built_in">start</span> [服务名]<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_2.png?raw=true" alt=""></p>
+<h2 id="配置ODBC环境"><a href="#配置ODBC环境" class="headerlink" title="配置ODBC环境"></a>配置ODBC环境</h2><p>1.首先要有一个<strong>以SQL Server身份验证登陆的账户</strong>。</p>
+<p>如果没有SQLServer身份的用户，可以看我之前写的一篇文章<a href="http://www.spyxxx.xyz/2019/05/29/SQLServer%E5%AD%A6%E4%B9%A0-5-%E4%B8%BASQLServer%E5%88%9B%E5%BB%BA%E7%99%BB%E5%BD%95%E8%B4%A6%E6%88%B7/" target="_blank" rel="noopener">SQLServer学习(5)为SQLServer创建登录账户</a>。</p>
+<p>2.然后<strong>打开“运行”，可以按“Win+R”键，调出运行框，然后搜索“odbcad32”，打开“ODBC数据源管理程序”对话框</strong>。然后如图依次操作。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_3.png?raw=true" alt=""></p>
+<p>3.<strong>添加用户数据源（SQLServer）</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_4.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_5.png?raw=true" alt=""></p>
+<p>4.<strong>命名数据源（自定义），确定服务器（这里不要选择local，选择本机的名字）。</strong></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_6.png?raw=true" alt=""></p>
+<p>5.<strong>选择用SQLServer验证，输入账号密码</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_7.png?raw=true" alt=""></p>
+<p>6.<strong>默认数据库为master</strong>。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_8.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_9.png?raw=true" alt=""></p>
+<p>7.<strong>测试数据源，看到测试结果“测试成功”即可。</strong></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_10.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_11.png?raw=true" alt=""></p>
+<p>8.如图，添加成功。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_12.png?raw=true" alt=""></p>
+<h2 id="选择一个数据表"><a href="#选择一个数据表" class="headerlink" title="选择一个数据表"></a>选择一个数据表</h2><p>具体怎么建库建表，可以看我之前写的一篇文章：<a href="http://spyxxx.xyz/2019/04/23/SQLServer%E5%AD%A6%E4%B9%A0-2-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E6%95%B0%E6%8D%AE%E8%A1%A8/" target="_blank" rel="noopener">SQL Server学习(2)创建数据库和数据表</a></p>
+<p>如图，选择“test2”数据库里的“test”数据表。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_13.png?raw=true" alt=""></p>
+<h1 id="C语言编写"><a href="#C语言编写" class="headerlink" title="C语言编写"></a>C语言编写</h1><h2 id="新建项目"><a href="#新建项目" class="headerlink" title="新建项目"></a>新建项目</h2><p><strong>使用Microsoft Visual Studio，新建一个空项目</strong>。如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_14.png?raw=true" alt=""></p>
+<h2 id="C语言关键函数"><a href="#C语言关键函数" class="headerlink" title="C语言关键函数"></a>C语言关键函数</h2><h3 id="SQLAllocHandle-函数"><a href="#SQLAllocHandle-函数" class="headerlink" title="SQLAllocHandle()函数"></a>SQLAllocHandle()函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-function">SQLRETURN <span class="hljs-title">SQLAllocHandle</span><span class="hljs-params">(</span></span><br><span class="hljs-function"><span class="hljs-params">     SQLSMALLINT     HandleType,</span></span><br><span class="hljs-function"><span class="hljs-params">     SQLHANDLE       InputHandle,</span></span><br><span class="hljs-function"><span class="hljs-params">     SQLHANDLE *     OutputHandlePtr)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>(1)参数：</strong></p>
+<p><strong><code>HandleType</code> ：[输入]</strong></p>
+<p>该变量只能从下列四个中的一个：</p>
+<p><code>SQL_HANDLE_ENV</code>：用于申请环境句柄<br><code>SQL_HANDLE_DBC</code> ：用于申请连接句柄</p>
+<p><code>SQL_HANDLE_DESC</code>：用于申请描述符句柄<br><code>SQL_HANDLE_STMT</code>：用于申请语句句柄</p>
+<p><strong><code>InputHandle</code> ：[输入]</strong></p>
+<p>该变量放入已经被分配好的前提句柄，如果第一个变量为环境句柄，则放入<code>SQL_NULL_HANDLE</code>即可，若果第一个变量为<code>SQL_HANDLE_DBC</code>，则第二个变量必须为已分配的环境句柄，如第一个变量为<code>SQL_HANDLE_DESC</code>，<code>SQL_HANDLE_STMT</code>则，第二个变量必须为已分配好的连接句柄。</p>
+<p><strong><code>OutputHandlePtr</code> ：[输出]</strong></p>
+<p>该变量为一个指针变量，用于保存申请来的句柄，申请句柄类型为第一个变量，在定义该指针的时候需注意类型一致。</p>
+<p><strong>(2)函数返回值(4种)：</strong></p>
+<p><code>SQL_SUCCESS</code>、<code>SQL_SUCCESS_WITH_INFO</code>、<code>SQL_INVALID_HANDLE</code>或<code>SQL_ERROR</code>。</p>
+<h3 id="SQLSetEnvAttr-函数"><a href="#SQLSetEnvAttr-函数" class="headerlink" title="SQLSetEnvAttr()函数"></a>SQLSetEnvAttr()函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-function">SQLRETURN <span class="hljs-title">SQLSetEnvAttr</span><span class="hljs-params">(  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLHENV      EnvironmentHandle,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLINTEGER   Attribute,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLPOINTER   ValuePtr,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLINTEGER   StringLength)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>(1)参数</p>
+<p><strong><code>EnvironmentHandle</code>：[输入]环境句柄。</strong></p>
+<p><strong><code>Attribute</code>：[输入]要设置，属性列在”注释”。</strong></p>
+<p><strong><code>ValuePtr</code> ：[输入]指向要与之关联的值<em>属性</em>。 具体取决于值<em>特性</em>， <em>ValuePtr</em>将 32 位整数值或指向以 null 结尾的字符串。</strong></p>
+<p><strong><code>StringLength</code>：[输入]如果ValuePtr指向的字符串或二进制缓冲区中，此参数应为的长度 ValuePtr。 对于字符串数据，此参数应包含在字符串中的字节数。</strong>如果<em>ValuePtr</em>是一个整数<em>StringLength</em>将被忽略。</p>
+<p>(2)函数返回值</p>
+<p><code>SQL_SUCCESS</code>、 <code>SQL_SUCCESS_WITH_INFO</code>、 <code>SQL_ERROR</code> 或<code>SQL_INVALID_HANDLE</code>。</p>
+<h3 id="SQLConnect-函数"><a href="#SQLConnect-函数" class="headerlink" title="SQLConnect()函数"></a>SQLConnect()函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-function">SQLRETURN <span class="hljs-title">SQLConnect</span><span class="hljs-params">(  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLHDBC        ConnectionHandle,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLCHAR *      ServerName,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLSMALLINT    NameLength1,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLCHAR *      UserName,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLSMALLINT    NameLength2,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLCHAR *      Authentication,  </span></span><br><span class="hljs-function"><span class="hljs-params">     SQLSMALLINT    NameLength3)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>(1)参数</p>
+<p><strong><code>ConnectionHandle</code>：[输入]连接句柄。</strong></p>
+<p><strong><code>ServerName</code>：[输入]数据源名称。</strong> 数据可能不位于该程序，在同一台计算机上，也可以在网络上的某个位置的另一台计算机上。</p>
+<p><strong><code>NameLength1</code>：[输入]长度 <code>ServerName</code>以字符为单位。</strong></p>
+<p><strong><code>UserName</code>：[输入]用户标识符。</strong></p>
+<p><strong><code>NameLength2</code>：[输入]长度 用户名以字符为单位。</strong></p>
+<p><strong><code>Authentication</code>：[输入]身份验证的字符串 （通常是密码）。</strong></p>
+<p><strong><code>NameLength3</code>：[输入]长度 身份验证以字符为单位。</strong></p>
+<p>(2)函数返回值</p>
+<p><code>SQL_SUCCESS</code>、 <code>SQL_SUCCESS_WITH_INFO</code>、 <code>SQL_ERROR</code>、 <code>SQL_INVALID_HANDLE</code> 或<code>SQL_STILL_EXECUTING</code>。</p>
+<h3 id="SQLBindCol-函数"><a href="#SQLBindCol-函数" class="headerlink" title="SQLBindCol()函数"></a>SQLBindCol()函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-function">SQLRETURN <span class="hljs-title">SQLBindCol</span><span class="hljs-params">(</span></span><br><span class="hljs-function"><span class="hljs-params">	SQLHSTMT          StatementHandle,</span></span><br><span class="hljs-function"><span class="hljs-params">	SQLUSMALLINT      ColumnNumber,</span></span><br><span class="hljs-function"><span class="hljs-params">	SQLSMALLINT       TargetType,</span></span><br><span class="hljs-function"><span class="hljs-params">	SQLPOINTER        TargetValuePtr,</span></span><br><span class="hljs-function"><span class="hljs-params">	SQLINTEGER        BufferLength,</span></span><br><span class="hljs-function"><span class="hljs-params">	SQLLEN *          StrLen_or_Ind)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>(1)参数</p>
+<p><strong><code>StatementHandle</code>：[输入]语句句柄。</strong></p>
+<p><strong><code>ColumnNumber</code>：[输入]要绑定的列集的结果数</strong>。列中从 0 开始，其中第 0 列书签列的列顺序递增编号。 如果不使用书签-也就是说，<code>SQL_ATTR_USE_BOOKMARKS</code> 语句属性设置为 <code>SQL_UB_OFF</code>，然后列号从 1 开始。</p>
+<p><strong><code>TargetType</code>：[输入]C 数据类型的标识符 TargetValuePtr缓冲区。</strong> 当它从数据源检索数据<code>SQLFetch</code>， <code>SQLFetchScroll</code>， <code>SQLBulkOperations</code>，或者<code>SQLSetPos</code>、驱动程序将数据转换为此类型;当其将数据发送到数据源<code>SQLBulkOperations</code>或<code>SQLSetPos</code>，驱动程序将数据从这种类型转换。</p>
+<p>如果<code>TargetType</code>参数中的 <code>SQL_DESC_DATETIME_INTERVAL_PRECISION</code> 和 <code>SQL_DESC_PRECISION</code> 字段设置为间隔数据类型，默认时间间隔的前导精度 (2) 和默认时间间隔的秒精度 (6)，ARD，分别用于数据。 如果<code>TargetType</code>参数是 <code>SQL_C_NUMERIC</code>，默认的精度 （驱动程序定义） 和 ARD 的<code>SQL_DESC_PRECISION</code> 和 <code>SQL_DESC_SCALE</code> 字段中设置默认小数位数 (0)，用于数据。 如果任何默认精度或小数位数不适当，应用程序显式应通过调用设置适当的描述符字段<code>SQLSetDescField</code>或<code>SQLSetDescRec</code>。</p>
+<p><strong><code>TargetValuePtr</code>：延迟的输入/输出指向要绑定到的列的数据缓冲区的指针。</strong><code>SQLFetch</code>并<code>SQLFetchScroll</code>在此缓冲区中返回数据。<code>SQLBulkOperations</code>在此返回数据缓冲区时操作是 <code>SQL_FETCH_BY_BOOKMARK</code>; 它检索的数据从该缓冲区时操作<code>SQL_ADD</code>或<code>SQL_UPDATE_BY_BOOKMARK</code>。 <code>SQLSetPos</code>在此返回数据缓冲区时操作是 <code>SQL_REFRESH</code>; 它检索的数据从该缓冲区时操作是 <code>SQL_UPDATE</code>。</p>
+<p>如果<code>TargetValuePtr</code>是 null 指针，该驱动程序取消绑定列的数据缓冲区。 应用程序可以通过调用取消绑定所有列<code>SQLFreeStmt</code>使用 <code>SQL_UNBIND</code> 选项。 应用程序可以取消绑定列的数据缓冲区，但如果仍有长度/指示器缓冲区列中，发往<code>TargetValuePtr调用中的参数</code>SQLBindCol<code>是 null 指针，但</code>StrLen_or_IndPtr`参数是有效的值。</p>
+<p><strong><code>BufferLength</code>：[输入]长度 TargetValuePtr以字节为单位的缓冲区。</strong></p>
+<p>驱动程序使用<em>BufferLength</em>以免超出末尾的编写<code>TargetValuePtr</code>缓冲时它将返回长度可变的数据，如字符或二进制数据。 请注意，该驱动程序，它返回字符数据时都计的 null 终止字符<code>TargetValuePtr</code>。 <code>TargetValuePtr</code>因此必须包含空间的 null 终止字符或驱动程序将截断数据。</p>
+<p>当驱动程序返回固定长度的数据，如整数或日期结构时，驱动程序会忽略<em>BufferLength</em>并假定缓冲区足够大以保存数据。 因此，务必要为固定长度的数据分配缓冲区足够大的应用程序或驱动程序将写入缓冲区的结束。</p>
+<p><code>SQLBindCol</code>返回 <code>SQLSTATE HY090</code> （字符串或缓冲区长度无效） 时<code>BufferLength</code>是小于 0，但不是在时<code>BufferLength</code>为 0。 但是，如果<code>TargetType</code>指定字符的类型，不应设置应用程序<code>BufferLengt</code>为 0，因为符合 ISO CLI 的驱动程序返回 <code>SQLSTATE HY090</code> （字符串或缓冲区长度无效），用例。</p>
+<p><strong><code>StrLen_or_IndPtr</code> ：延迟的输入/输出要绑定到的列的长度/指示器缓冲区的指针</strong>。<code>SQLFetch</code>并<code>SQLFetchScroll</code>此缓冲区中返回值。 <code>SQLBulkOperations</code>检索一个值，从该缓冲区何时操作是 SQL_ADD、 <code>SQL_UPDATE_BY_BOOKMARK</code>，还是<code>SQL_DELETE_BY_BOOKMARK</code>。 <code>SQLBulkOperations</code>返回一个值，在此缓冲区何时操作是 <code>SQL_FETCH_BY_BOOKMARK</code>。 <code>SQLSetPos</code>返回一个值，在此缓冲区何时操作是 <code>SQL_REFRESH</code>; 它检索一个值，从该缓冲区时操作是<code>SQL_UPDATE</code>。</p>
+<p><code>SQLFetch</code>，<code>SQLFetchScroll</code>，<code>SQLBulkOperations``，并且</code>SQLSetPos`可以返回的长度/指示器缓冲区中的以下值：</p>
+<ul>
+<li>可用于返回的数据的长度</li>
+<li><code>SQL_NO_TOTAL</code></li>
+<li><code>SQL_NULL_DATA</code></li>
+</ul>
+<p>应用程序可以将以下值放在与一起使用的长度/指示器缓冲区<code>SQLBulkOperations</code>或<code>SQLSetPos</code>:</p>
+<ul>
+<li>正在发送的数据的长度</li>
+<li><code>SQL_NTS</code></li>
+<li><code>SQL_NULL_DATA</code></li>
+<li><code>SQL_DATA_AT_EXEC</code></li>
+<li><code>SQL_LEN_DATA_AT_EXEC</code> 宏的结果</li>
+<li><code>SQL_COLUMN_IGNORE</code></li>
+</ul>
+<p>如果指示器缓冲区和长度的缓冲区是单独的缓冲区，指示器缓冲区可返回仅<code>SQL_NULL_DATA</code>，而长度缓冲区可以返回所有其他值。</p>
+<p>如果<code>StrLen_or_IndPtr</code>是使用空指针、 没有长度或指示器值。 当提取数据和数据为 NULL 时，这是一个错误。</p>
+<p>(2)函数返回值</p>
+<p><code>SQL_SUCCESS</code>、<code>SQL_SUCCESS_WITH_INFO</code>、 <code>SQL_ERROR</code>或 <code>SQL_INVALID_HANDLE</code>。</p>
+<h3 id="SQLExecDirect-函数"><a href="#SQLExecDirect-函数" class="headerlink" title="SQLExecDirect()函数"></a>SQLExecDirect()函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-function">SQLRETURN <span class="hljs-title">SQLExecDirect</span><span class="hljs-params">(</span></span><br><span class="hljs-function"><span class="hljs-params">     SQLHSTMT     StatementHandle,</span></span><br><span class="hljs-function"><span class="hljs-params">     SQLCHAR *    StatementText,</span></span><br><span class="hljs-function"><span class="hljs-params">     SQLINTEGER   TextLength)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p>(1)参数</p>
+<p><strong><code>StatementHandle</code>：[输入]语句句柄。</strong></p>
+<p><strong><code>StatementText</code>：[输入]若要执行的 SQL 语句。</strong></p>
+<p><strong><code>TextLength：·[输入]长度</code>StatementText`以字符为单位。</strong></p>
+<p>(2)函数返回值</p>
+<p><code>SQL_SUCCESS</code>、 <code>SQL_SUCCESS_WITH_INFO</code>、 <code>SQL_NEED_DATA</code>、<code>SQL_STILL_EXECUTING</code>、 <code>SQL_ERROR</code>、 SQL_NO_DATA、 <code>SQL_INVALID_HANDLE</code> 或 <code>SQL_PARAM_DATA_AVAILABLE</code>。</p>
+<h3 id="SQLFetch-函数"><a href="#SQLFetch-函数" class="headerlink" title="SQLFetch()函数"></a>SQLFetch()函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs C"><span class="hljs-function">SQLRETURN <span class="hljs-title">SQLFetch</span> <span class="hljs-params">(SQLHSTMT hstmt)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p><code>hstmt</code>：句柄</p>
+<p><code>SQLFetch()</code> 使游标前进到结果集的下一行，并检索任何已绑定的列。</p>
+<p><code>SQLFetch()</code> 可用来将数据直接接收到 <code>SQLBindCol()</code> 指定的变量中，也可以在取装之后通过调用 <code>SQLGetData()</code> 来分别接收列。如果在绑定列时指示了转换，则调用 <code>SQLFetch()</code> 时也将执行数据转换。</p>
+<p>仅当最近对 <em>hstmt</em> 执行的语句是 SELECT 时，才可以调用 <code>SQLFetch()</code>。</p>
+<p>使用 <code>SQLBindCol()</code> 绑定的应用程序变量的数目一定不能超出结果集中的列数，否则 <code>SQLFetch()</code> 将失败。</p>
+<p>如果尚未调用 <code>SQLBindCol()</code> 来绑定任何列，则 <code>SQLFetch()</code> 不返回数据给应用程序，而仅仅使游标前进。在这种情况下，可接着调用 <code>SQLGetData()</code> 来个别地获取所有的列。当 <code>SQLFetch()</code> 使游标前进到下一行时，将废弃未绑定的列中的数据。</p>
+<h3 id="SQLGetData-函数"><a href="#SQLGetData-函数" class="headerlink" title="SQLGetData()函数"></a>SQLGetData()函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-function">SQLRETURN <span class="hljs-title">SQLGetData</span><span class="hljs-params">(  </span></span><br><span class="hljs-function"><span class="hljs-params">      SQLHSTMT       StatementHandle,  </span></span><br><span class="hljs-function"><span class="hljs-params">      SQLUSMALLINT   Col_or_Param_Num,  </span></span><br><span class="hljs-function"><span class="hljs-params">      SQLSMALLINT    TargetType,  </span></span><br><span class="hljs-function"><span class="hljs-params">      SQLPOINTER     TargetValuePtr,  </span></span><br><span class="hljs-function"><span class="hljs-params">      SQLLEN         BufferLength,  </span></span><br><span class="hljs-function"><span class="hljs-params">      SQLLEN *       StrLen_or_IndPtr)</span></span>;<br></code></pre></td></tr></table></figure>
+
+<p><strong>(1)参数：</strong></p>
+<p><strong><code>StatementHandle</code> ：[输入]语句句柄。</strong></p>
+<p><strong><code>Col_or_Param_Num</code> ：[输入]对于检索列数据</strong>，它是列的要为其返回数据数。 结果集列在不断增加的列顺序从 1 开始编号。书签列是列号为 0;这可以是仅在指定是否启用书签。而用于检索参数数据时，它是从 1 开始的参数的序号。</p>
+<p><strong><code>TargetType</code> ：[输入]C 数据类型的类型标识符<code>TargetValuePtr</code>缓冲区</strong>。</p>
+<p>如果<code>TargetType</code>是<code>SQL_ARD_TYPE</code>，驱动程序使用 <code>ARD SQL_DESC_CONCISE_TYPE</code> 字段中指定的类型标识符。 如<code>TargetType</code>是<code>SQL_APD_TYPE</code>， <strong>SQLGetData</strong>将使用相同的 C 数据类型中指定<strong>SQLBindParameter</strong>。 C 数据类型中的指定，否则<strong>SQLGetData</strong>重写中指定的 C 数据类型<strong>SQLBindParameter</strong>。 如果它为<code>SQL_C_DEFAULT</code>，驱动程序将选择基于源的 SQL 数据类型的默认 C 数据类型。此外可以指定扩展的 C 数据类型。</p>
+<p><strong><code>TargetValuePtr</code>：[输出]指向用于返回数据缓冲区的指针。</strong><code>TargetValuePtr</code>不能为 NULL。</p>
+<p><strong><code>BufferLength</code>：[输入]长度 <code>TargetValuePtr</code>以字节为单位的缓冲区。</strong></p>
+<p>驱动程序使用<code>BufferLength</code>以免超出末尾的编写<code>TargetValuePtr</code>缓冲时返回可变长度数据，如字符或二进制数据。 请注意，驱动程序将 null 终止字符，返回字符数据时记<code>TargetValuePtr</code>。<code>TargetValuePtr</code>因此必须包含 null 终止字符的空间或驱动程序将截断数据。</p>
+<p>当驱动程序返回固定长度的数据，如整数或日期结构时，驱动程序会忽略<em>BufferLength</em>并假定缓冲区足够大以保存数据。 因此对于应用程序为固定长度的数据分配足够大的缓冲区或驱动程序将写入缓冲区的结束。</p>
+<p><code>SQLGetData</code>返回 <code>SQLSTATE HY090</code> （字符串或缓冲区长度无效） 时<code>BufferLength</code>是小于 0，但不是在时<code>BufferLength</code>为 0。</p>
+<p><strong><code>StrLen_or_IndPtr</code>：[输出]要返回的长度或指示器值在其中的缓冲区的指针</strong>。如果这是 null 指针，则返回没有长度或指示器的值。 这将返回错误时要提取的数据为 NULL。</p>
+<p><code>SQLGetData</code>可以返回的长度/指示器缓冲区中的以下值：</p>
+<ul>
+<li>可用于返回的数据的长度</li>
+<li><code>SQL_NO_TOTAL</code></li>
+<li><code>SQL_NULL_DATA</code></li>
+</ul>
+<p><strong>(2)函数返回值</strong></p>
+<p><code>SQL_SUCCESS</code>、<code>SQL_SUCCESS_WITH_INFO</code>、<code>SQL_NO_DATA</code>、<code>SQL_STILL_EXECUTING</code>、<code>SQL_ERROR</code> 或 <code>SQL_INVALID_HANDLE</code>。</p>
+<p>这部分主要参考了<a href="https://docs.microsoft.com/zh-cn/sql/connect/odbc/microsoft-odbc-driver-for-sql-server?view=sql-server-2017" target="_blank" rel="noopener">Microsoft SQL文档</a>，详细内容可以在官方文档查看。</p>
+<h2 id="C语言代码"><a href="#C语言代码" class="headerlink" title="C语言代码"></a>C语言代码</h2><p>完整代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string.h&gt;     </span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;windows.h&gt;     </span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sql.h&gt;     </span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sqlext.h&gt;     </span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;sqltypes.h&gt;     </span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;odbcss.h&gt;  </span></span><br><br>SQLHENV henv = SQL_NULL_HENV;<br>SQLHDBC hdbc = SQL_NULL_HDBC;<br>SQLHSTMT hstmt = SQL_NULL_HSTMT;<br><br>SQLINTEGER id;<br>SQLCHAR name[<span class="hljs-number">20</span>];<br>SQLINTEGER len_id, len_name;<br><br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>	SQLRETURN retcode;<br><br>	retcode = SQLAllocHandle(SQL_HANDLE_ENV, <span class="hljs-literal">NULL</span>, &amp;henv); <span class="hljs-comment">//申请环境句柄</span><br>	retcode = SQLSetEnvAttr(henv, SQL_ATTR_ODBC_VERSION,<br>		(SQLPOINTER)SQL_OV_ODBC3,<br>		SQL_IS_INTEGER); <span class="hljs-comment">//设置环境属性</span><br>	retcode = SQLAllocHandle(SQL_HANDLE_DBC, henv, &amp;hdbc); <span class="hljs-comment">//申请数据库连接句柄</span><br>	retcode = SQLConnect(hdbc, (SQLCHAR*)<span class="hljs-string">"SQLC"</span>, SQL_NTS, (SQLCHAR*)<span class="hljs-string">"SQLC"</span>, SQL_NTS, (SQLCHAR*)<span class="hljs-string">"SQLC123"</span>, SQL_NTS);<br>	<span class="hljs-keyword">if</span> ((retcode == SQL_SUCCESS) || (retcode == SQL_SUCCESS_WITH_INFO)) &#123; <span class="hljs-comment">//判断是否成功执行</span><br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">"success!\n"</span>);<br>		retcode = SQLAllocHandle(SQL_HANDLE_STMT, hdbc, &amp;hstmt);<span class="hljs-comment">//申请SQL语句句柄 </span><br>		SQLCHAR sql[] = <span class="hljs-string">"USE test2"</span>;<br>		retcode = SQLExecDirect(hstmt, sql, SQL_NTS);<span class="hljs-comment">//直接执行SQL语句</span><br>		SQLCHAR sql1[] = <span class="hljs-string">"SELECT * FROM test"</span>;<br>		retcode = SQLExecDirect(hstmt, sql1, SQL_NTS);<span class="hljs-comment">//直接执行SQL语句</span><br>		<span class="hljs-keyword">if</span> (retcode == SQL_SUCCESS || retcode == SQL_SUCCESS_WITH_INFO) &#123;<br>			<span class="hljs-keyword">while</span> (SQLFetch(hstmt) != SQL_NO_DATA) &#123;<br>				SQLGetData(hstmt, <span class="hljs-number">1</span>, SQL_C_ULONG, &amp;id, <span class="hljs-number">20</span>, &amp;len_id);<br>				SQLGetData(hstmt, <span class="hljs-number">2</span>, SQL_C_CHAR, &amp;name, <span class="hljs-number">20</span>, &amp;len_name);<br>				<span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d %s\n"</span>, id, name);<br>			&#125;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">"success2!"</span>);<br>		&#125;<br>		<span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-built_in">printf</span>(<span class="hljs-string">"false2!"</span>);<br>		&#125;<br>		getchar();<br>	&#125;<br>	<span class="hljs-keyword">else</span> &#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">"false!"</span>);<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>运行结果：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-6_15.png?raw=true" alt=""></p>
+<hr>
+<p>参考链接：</p>
+<p><a href="https://www.cnblogs.com/beta-data/p/4457898.html" target="_blank" rel="noopener">C语言+ODBC+SQL 连接</a></p>
+<p><a href="https://blog.csdn.net/tanshoudong0049/article/details/74538967" target="_blank" rel="noopener">ODBC学习笔记—SQLAllocHandle</a></p>
+<p><a href="https://docs.microsoft.com/en-us/sql/odbc/reference/develop-app/using-sqlbindcol?view=sql-server-2017" target="_blank" rel="noopener">Microsoft-Using SQLBindCol</a></p>
+<p><a href="https://blog.csdn.net/u013007900/article/details/51174128" target="_blank" rel="noopener">VS用C语言连接SQL Server解决办法</a></p>
+<p><a href="https://www.xuebuyuan.com/573634.html" target="_blank" rel="noopener">学步园-SQLBindCol</a></p>
+<hr>
+<p>初学，可能写的一些地方不对，欢迎指出。</p>
+<p>如有问题，可以在评论区里讨论。如需转载，请注明出处，谢谢。</p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/GoodNight-Git" target="_blank" rel="noopener">Github</a></li><li><a href="https://juejin.im/user/5cb1ed9b5188251b090acc5c" target="_blank" rel="noopener">掘金</a></li><li><a href="mailto:goodnightlilanhui@gmail.com">Mail</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a></li></ul></div><h2>Categories</h2><div class="sidebar__categories"><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/about/">about</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/notes/">notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/plans/">plans</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/projects/">projects</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Axios/" rel="tag">Axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding-net/" rel="tag">Coding.net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingThinking/" rel="tag">CodingThinking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Color/" rel="tag">Color</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/" rel="tag">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kali-2-0/" rel="tag">Kali 2.0</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keycloak/" rel="tag">Keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Web/" rel="tag">Python Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL-Server/" rel="tag">SQL Server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/" rel="tag">Translation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/" rel="tag">UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">Ubuntu系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VUE/" rel="tag">VUE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win10/" rel="tag">Win10</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keycloak/" rel="tag">keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/taro/" rel="tag">taro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E6%8E%A8/" rel="tag">内推</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%92%E6%AD%A6%E7%BA%AA%E9%A1%B9%E7%9B%AE/" rel="tag">寒武纪项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E7%AB%99/" rel="tag">建站</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" rel="tag">碎碎念</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2019/06/07/SQLServer%E5%AD%A6%E4%B9%A0-7-C%E8%AF%AD%E8%A8%80txt%E6%96%87%E6%9C%AC%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E5%BA%93/">SQLServer学习(7)C语言txt文本插入数据库</a><a class="next-button" href="/2019/05/29/SQLServer%E5%AD%A6%E4%B9%A0-5-%E4%B8%BASQLServer%E5%88%9B%E5%BB%BA%E7%99%BB%E5%BD%95%E8%B4%A6%E6%88%B7/">SQLServer学习(5)为SQLServer创建登录账户</a></div></div></div></div><div class="footer"><span>©️2019-2020 </span><p>Designed By&nbsp;<strong><a href="https://github.com/random-yang" target="_blank" rel="noopener">RandomYang</a></strong></p><p>Changed By<strong><a href="http://www.goodnight.wiki" target="_blank" rel="noopener">GoodNight</a></strong></p><p>Powered By&nbsp;<strong><a href="https://hexo.io" target="_blank" rel="noopener">hexo</a></strong></p><p><div id="beian"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61019002001135" target="_blank" rel="noopener"><img src="../img/beian.png"><span>陕公网安备 61019002001135号&nbsp;</span></a></div><div id="tengxun"><a href="http://beian.miit.gov.cn" target="_blank" rel="noopener">陕ICP备20010639号</a></div></p></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="SQL Server学习(1)介绍与安装 [ GoodNight ] "><meta name="theme-color" content="#ebc65a"><title>SQL Server学习(1)介绍与安装 [ GoodNight ] </title><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-171806323-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-171806323-1');</script><link rel="stylesheet" href="/css/tocbot.css"><script src="/js/tocbot.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">GoodNight</a></h1><p>Take A Rest</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">SQL Server学习(1)介绍与安装</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href="">SQL Server学习(1)介绍与安装</a></h2><span class="post__date">2019-04-10</span><a href="/tags/SQL-Server/"><span class="post__tags">#SQL Server</span></a></div></div><div class="article__content"><p>我的配置：</p>
+<ul>
+<li><p>操作系统：Window10 x64</p>
+</li>
+<li><p>SQL Server 2017</p>
+</li>
+</ul>
+<p>以下内容均为我学习SQL Server的笔记，可能有摘抄的（我会标明出处），可能也有自己写的。</p>
+<p>最后安装的是2016版本的，未来有机会再补上2017版本的过程。  ——2019.4.12</p>
+<hr>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>以下介绍出自百度百科：</p>
+<blockquote>
+<p>SQL是英文Structured Query Language的缩写，意思为<a href="https://baike.baidu.com/item/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F" target="_blank" rel="noopener">结构化查询语言</a>。</p>
+<p>SQL语言的主要功能就是同各种数据库建立联系，进行沟通。</p>
+<p>按照ANSI(<a href="https://baike.baidu.com/item/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E5%AD%A6%E4%BC%9A/1351184?fromtitle=%E7%BE%8E%E5%9B%BD%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E5%8D%8F%E4%BC%9A&fromid=5709537" target="_blank" rel="noopener">美国国家标准协会</a>)的规定，SQL被作为<a href="https://baike.baidu.com/item/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/11032386?fromtitle=%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F&fromid=696511" target="_blank" rel="noopener">关系型数据库管理系统</a>的标准语言。</p>
+<p>SQL Server是由Microsoft开发和推广的<a href="https://baike.baidu.com/item/%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/11032386" target="_blank" rel="noopener">关系数据库管理系统</a>（RDBMS）</p>
+</blockquote>
+<p>所以说，SQL Server是一个关系数据库管理系统。</p>
+<h2 id="SQL-Server可以用来做什么？"><a href="#SQL-Server可以用来做什么？" class="headerlink" title="SQL Server可以用来做什么？"></a>SQL Server可以用来做什么？</h2><ul>
+<li><p>创建和维护数据库</p>
+</li>
+<li><p>创建和维护表</p>
+</li>
+<li><p>创建和维护其他数据库对象，如存储过程，视图等</p>
+</li>
+<li><p>创建和维护和调度数据备份</p>
+</li>
+<li><p>复制（例如，创建数据库的副本）</p>
+</li>
+<li><p>创建和维护用户，角色等</p>
+</li>
+<li><p>优化任务</p>
+<p>(<em>出自W3CSchool</em>)</p>
+</li>
+</ul>
+<h2 id="SQL-Server2017的版本介绍"><a href="#SQL-Server2017的版本介绍" class="headerlink" title="SQL Server2017的版本介绍"></a>SQL Server2017的版本介绍</h2><ul>
+<li><p><strong>SQL Server 2017 on-premises</strong><br>借助可扩展的混合数据平台，针对要求严苛的工作负载构建智能任务关键型应用程序。为期 180 天的 Windows SQL Server 2017 免费试用。</p>
+</li>
+<li><p><strong>SQL Server in the cloud</strong></p>
+<p>充分利用 SQL 数据库内置的高可用性、安全性和智能以及熟悉的 Azure SQL 引擎，而无需再进行复杂的基础架构管理。在 Azure 中免费使用 SQL 数据库。</p>
+</li>
+<li><p><strong>SQL Server 2017 Developer</strong></p>
+<p>SQL Server 2017 Developer 是一个全功能免费版本，许可在非生产环境下用作开发和测试数据库。</p>
+</li>
+<li><p><strong>SQL Server 2017 Express</strong></p>
+<p>SQL Server 2017 Express 是 SQL Server 的一个免费版本，非常适合用于桌面、Web 和小型服务器应用程序的开发和生产。</p>
+</li>
+</ul>
+<h2 id="适用平台"><a href="#适用平台" class="headerlink" title="适用平台"></a>适用平台</h2><ul>
+<li><p><strong>Windows</strong></p>
+</li>
+<li><p><strong>Linux</strong></p>
+</li>
+<li><p><strong>Docker</strong></p>
+</li>
+</ul>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><strong><a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads#" target="_blank" rel="noopener">官网下载SQL Server</a></strong></p>
+<p>根据上面的版本介绍（官网下载页面也有介绍），选择适合自己的版本，下载。（下载过程较为简单，所以此处略过）</p>
+<p>因为我是Windows，根据我目前的需求，我选择下载SQL Server 2017 Developer。</p>
+<h2 id="SQL-Server2017安装"><a href="#SQL-Server2017安装" class="headerlink" title="SQL Server2017安装"></a>SQL Server2017安装</h2><p>安装如下，我选择了<strong>自定义安装</strong>，</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-1_1.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-1_2.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-1_3.png?raw=true" alt=""></p>
+<p>当然你也可以选别的，然后<strong>选择安装路径</strong>，开始<strong>安装</strong>，</p>
+<p>结果一开始就报错，我们看看报错原因“<strong>无法连接到远程服务器</strong>”，有可能是国外的服务器不好连上，</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-1_4.png?raw=true" alt=""></p>
+<p>那我只好开启我的<strong>fan-qiang软件</strong>，然后就<strong>正常下载</strong>了。我的网速比较慢，估计要下载好一会了。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-1_5.png?raw=true" alt=""></p>
+<p>————2019.4.12时间分割线————</p>
+<p>我没想到下载失败了。</p>
+<p>如果未来，把2017的给下下来了，如果有时间，我会再来补上。</p>
+<hr>
+<p>————2019.4.12时间分割线————</p>
+<h2 id="SQL-Server2016安装"><a href="#SQL-Server2016安装" class="headerlink" title="SQL Server2016安装"></a>SQL Server2016安装</h2><p>emm。。。没想到最后下载失败了。从星期二下到星期五，每天都开机挂着下。没办法，只好跑去西电睿思上下载别人发的种子，虽然没有最新的SQL Server2017的种子，但2016的也是够用了。因为时间比较赶安装过程我也忘了截图了，只好把我当时用的<strong>参考链接</strong>记下来：</p>
+<p><a href="https://www.cnblogs.com/ksguai/p/5869558.html" target="_blank" rel="noopener"><strong>SQL server 2016 安装步骤</strong></a></p>
+<p><a href="https://zhidao.baidu.com/question/1758182120612261868.html" target="_blank" rel="noopener"><strong>SQLServer 2016安装时的错误：Polybase要求安装Oracle JRE 7更新51或更高版本</strong></a></p>
+<p>因为我中间报了有关于Polybase的错误，从他的报错来看是要装JRE 7，然而这个版本不存在了，我为了省事就直接不装需要JRE 7的部件，具体不装什么直接看上面的链接。</p>
+<h2 id="SQL-Server2016安装成功"><a href="#SQL-Server2016安装成功" class="headerlink" title="SQL Server2016安装成功"></a>SQL Server2016安装成功</h2><p>安装完后，就如截图那样，好多个，作为一个初学者，我都不是很清楚哪个是哪个。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-1_6.png?raw=true" alt=""></p>
+<p>但你只要从当中找一个名字叫“<strong>Microsoft SQL Server Management Studio</strong>”，如图就是这样，你只要登录上去就好了。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/SQLServer/SQLfigure-1_7.png?raw=true" alt=""></p>
+<hr>
+<p>初学，可能写的一些地方不对，欢迎指出。</p>
+<p>如有问题，可以在评论区里讨论。如需转载，请注明出处，谢谢。</p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/GoodNight-Git" target="_blank" rel="noopener">Github</a></li><li><a href="https://juejin.im/user/5cb1ed9b5188251b090acc5c" target="_blank" rel="noopener">掘金</a></li><li><a href="mailto:goodnightlilanhui@gmail.com">Mail</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a></li></ul></div><h2>Categories</h2><div class="sidebar__categories"><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/about/">about</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/notes/">notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/plans/">plans</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/projects/">projects</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Axios/" rel="tag">Axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding-net/" rel="tag">Coding.net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingThinking/" rel="tag">CodingThinking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Color/" rel="tag">Color</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/" rel="tag">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kali-2-0/" rel="tag">Kali 2.0</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keycloak/" rel="tag">Keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Web/" rel="tag">Python Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL-Server/" rel="tag">SQL Server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/" rel="tag">Translation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/" rel="tag">UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">Ubuntu系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VUE/" rel="tag">VUE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win10/" rel="tag">Win10</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keycloak/" rel="tag">keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/taro/" rel="tag">taro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E6%8E%A8/" rel="tag">内推</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%92%E6%AD%A6%E7%BA%AA%E9%A1%B9%E7%9B%AE/" rel="tag">寒武纪项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E7%AB%99/" rel="tag">建站</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" rel="tag">碎碎念</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2019/04/13/MySQL%E5%AD%A6%E4%B9%A0(1)%E5%AE%89%E8%A3%85/">MySQL学习(1)安装</a><a class="next-button" href="/2019/04/03/Qt5-12-0-Opencv4-0%E9%85%8D%E7%BD%AE/">Qt5.12.0+OpenCV4.0配置</a></div></div></div></div><div class="footer"><span>©️2019-2020 </span><p>Designed By&nbsp;<strong><a href="https://github.com/random-yang" target="_blank" rel="noopener">RandomYang</a></strong></p><p>Changed By<strong><a href="http://www.goodnight.wiki" target="_blank" rel="noopener">GoodNight</a></strong></p><p>Powered By&nbsp;<strong><a href="https://hexo.io" target="_blank" rel="noopener">hexo</a></strong></p><p><div id="beian"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61019002001135" target="_blank" rel="noopener"><img src="../img/beian.png"><span>陕公网安备 61019002001135号&nbsp;</span></a></div><div id="tengxun"><a href="http://beian.miit.gov.cn" target="_blank" rel="noopener">陕ICP备20010639号</a></div></p></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

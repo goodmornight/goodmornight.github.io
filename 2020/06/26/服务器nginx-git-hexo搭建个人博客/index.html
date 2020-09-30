@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="服务器Nginx/Git/Hexo搭建个人博客 [ GoodNight ] "><meta name="theme-color" content="#ebc65a"><title>服务器Nginx/Git/Hexo搭建个人博客 [ GoodNight ] </title><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-171806323-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-171806323-1');</script><link rel="stylesheet" href="/css/tocbot.css"><script src="/js/tocbot.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">GoodNight</a></h1><p>Take A Rest</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">服务器Nginx/Git/Hexo搭建个人博客</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href="">服务器Nginx/Git/Hexo搭建个人博客</a></h2><span class="post__date">2020-06-26</span><a href="/tags/Hexo/"><span class="post__tags">#Hexo</span></a><a href="/tags/%E5%BB%BA%E7%AB%99/"><span class="post__tags">#建站</span></a><a href="/tags/Git/"><span class="post__tags">#Git</span></a><a href="/tags/Nginx/"><span class="post__tags">#Nginx</span></a></div></div><div class="article__content"><p>（注意写文时间，以官方文档为主）</p>
+<p>这次618在腾讯云买了个95/年的服务器，又重新搭起了我的小破站，简单记录一下。</p>
+<p>我的环境配置：</p>
+<ul>
+<li>服务器：1核2G，1M带宽，腾讯云服务器，Ubuntu系统</li>
+<li>nginx/1.14.0 (Ubuntu)(服务器)</li>
+<li>git/2.17.1(服务器)</li>
+<li>hexo/4.2.1（本地）</li>
+<li>node/12.6.3（本地）</li>
+</ul>
+<p>基本流程：</p>
+<pre class="mermaid">graph LR
+A(本地搭建hexo博客) -->B(购买服务器);
+B -->C(服务器配置);
+C -->D(上传博客静态文件);</pre>
+
+
+
+
+
+<h1 id="本地搭建Hexo博客"><a href="#本地搭建Hexo博客" class="headerlink" title="本地搭建Hexo博客"></a>本地搭建Hexo博客</h1><p>Hexo官方文档已经讲得非常详细了。<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">传送门:Hexo</a></p>
+<p>本博客目前使用的<strong>theme</strong>是<a href="https://github.com/random-yang/paper" target="_blank" rel="noopener">Paper</a>。</p>
+<p>作者的博客示例：<a href="https://randomyang.top/" target="_blank" rel="noopener">Paper-Demo</a></p>
+<h1 id="购买服务器"><a href="#购买服务器" class="headerlink" title="购买服务器"></a>购买服务器</h1><p>这部分内容，我其实也是个小白，但建议服务器用Linux系统镜像，个人感觉Window Server图形化界面远程链接起来有点卡。博客刚开始没什么流量的话，就弄个1核1G、1M带宽即可，当然土豪随意。</p>
+<p>拥有服务器后，我是用xshell这个软件连接的。</p>
+<p>具体细节，我就不细说了，主要说服务器配置和本地如何将静态文件上传到服务器。</p>
+<h1 id="服务器配置"><a href="#服务器配置" class="headerlink" title="服务器配置"></a>服务器配置</h1><p>目标：</p>
+<ol>
+<li>将<code>Hexo</code>博客部署在服务器自建Git仓库</li>
+<li>该Git仓库只有特定用户、通过git-shell方式才可访问</li>
+<li>配置<code>Nginx</code>，使远程可以访问博客文件</li>
+<li>配置向仓库提交代码后自动更新博客文件目录的钩子</li>
+</ol>
+<p><strong>建议全程使用最高权限，创建或配置。</strong></p>
+<h2 id="安装Git和Nginx"><a href="#安装Git和Nginx" class="headerlink" title="安装Git和Nginx"></a>安装Git和Nginx</h2><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo apt-get update<br>sudo apt-get install git nginx -y<br></code></pre></td></tr></table></figure>
+
+<h2 id="创建git用户"><a href="#创建git用户" class="headerlink" title="创建git用户"></a>创建git用户</h2><p>创建一个git用户，用于专门远程运行git 服务。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo adduser git<br></code></pre></td></tr></table></figure>
+
+<h2 id="创建证书登录"><a href="#创建证书登录" class="headerlink" title="创建证书登录"></a>创建证书登录</h2><p>收集所有需要登录的用户的公钥，就是本地的<code>id_rsa.pub</code>文件，把所有公钥导入到<code>/home/git/.ssh/authorized_keys</code>文件里，一行一个。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo vim /home/git/.ssh/authorized_keys<br></code></pre></td></tr></table></figure>
+
+<p>（修改方式多种，我这里用vim）</p>
+<p>如何查看本机的公钥。<a href="https://blog.csdn.net/shog808/article/details/76563136" target="_blank" rel="noopener">传送门：查看本机ssh公钥，生成公钥</a></p>
+<h2 id="创建Git仓库-设置权限"><a href="#创建Git仓库-设置权限" class="headerlink" title="创建Git仓库+设置权限"></a>创建Git仓库+设置权限</h2><p>在<code>/var/repo/</code>下创建名为<code>hexo_static</code>的裸仓库，并设置权限。（名字和位置都可自定义，代码“#”后的内容均是注释解释，不需要复制）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo mkdir /var/repo/                 <span class="hljs-comment"># 创建文件夹</span><br>sudo chown -R git:git /var/repo/      <span class="hljs-comment"># 设置这个文件夹，用户权限，只有git用户可操作</span><br>sudo chmod -R 755 /var/repo/          <span class="hljs-comment"># 设置这个文件用户可操作权限，-R的意思是这个文件以下的所有文件执行同样操作</span><br><span class="hljs-built_in">cd</span> /var/repo/                         <span class="hljs-comment"># 进入该文件夹</span><br>git init --bare hexo_static.git       <span class="hljs-comment"># 创建一个名为hexo_static的裸仓库</span><br>sudo chown -R git:git hexo_static.git <span class="hljs-comment"># 设置这个裸仓库只有git用户才可操作权限</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="禁用shell登录"><a href="#禁用shell登录" class="headerlink" title="禁用shell登录"></a>禁用shell登录</h2><p>出于安全考虑，第二步创建的git用户不允许登录shell，这可以通过编辑<code>/etc/passwd</code>文件完成。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo vim /etc/passwd<br></code></pre></td></tr></table></figure>
+
+<p>找到类似下面的一行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git:x:1001:1001:,,,:/home/git:/bin/bash<br></code></pre></td></tr></table></figure>
+
+<p>改为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell<br></code></pre></td></tr></table></figure>
+
+<p>这样，<code>git</code>用户可以正常通过ssh使用git，但无法登录shell，因为<code>git</code>用户指定的<code>git-shell</code>每次一登录就自动退出。</p>
+<h2 id="配置Nginx托管文件目录"><a href="#配置Nginx托管文件目录" class="headerlink" title="配置Nginx托管文件目录"></a>配置Nginx托管文件目录</h2><p>创建<code>/var/www/hexo</code>目录，用于Nginx托管，修改目录所有权和权限。（名字和位置都可自定义）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo mkdir -p /var/www/hexo<br><br>sudo chown -R git:git /var/www/hexo<br>sudo chmod -R 755 /var/www/hexo<br></code></pre></td></tr></table></figure>
+
+<p>随后修改Nginx的<code>default</code>设置，使<code>root</code>指向<code>hexo</code>目录。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo vim /etc/nginx/sites-available/default<br></code></pre></td></tr></table></figure>
+
+<p>修改对应项（不确定或不知道怎么修改的，再google查一下nginx配置文件），默认端口80，输入服务器公网IP即可访问你对应的文件夹了。但如果是别的端口，就还需要另外写一个server{}。</p>
+<p><strong>注意让你的服务器打开此端口。</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">...<br>server &#123;<br>        listen 80 default_server;<br>        listen [::]:80 default_server;<br><br>        root /var/www/hexo;<br>        index index.html index.htm;<br>...<br></code></pre></td></tr></table></figure>
+
+<p>重启Nginx服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo service nginx restart<br></code></pre></td></tr></table></figure>
+
+<h2 id="创建Git钩子"><a href="#创建Git钩子" class="headerlink" title="创建Git钩子"></a>创建Git钩子</h2><p>在你新建的git裸仓库的文件下的hooks目录下，新建钩子。<strong>注意该文件创建后，记得保持git用户权限。</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sudo vim /var/repo/hexo_static.git/hooks/post-receive<br></code></pre></td></tr></table></figure>
+
+<p>在该文件中添加两行代码，指定 Git 的工作树（源代码）和 Git 目录（配置文件等）。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><br>git --work-tree=/var/www/hexo --git-dir=/var/repo/hexo_static.git checkout -f<br></code></pre></td></tr></table></figure>
+
+<p>保存并退出文件，并让该文件变为可执行文件。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">chmod +x /var/repo/hexo_static.git/hooks/post-receive<br></code></pre></td></tr></table></figure>
+
+<h1 id="本地博客配置部署"><a href="#本地博客配置部署" class="headerlink" title="本地博客配置部署"></a>本地博客配置部署</h1><p>编辑本地博客根目录下的<code>config.yml</code>文件</p>
+<figure class="highlight less"><table><tr><td class="code"><pre><code class="hljs less"><span class="hljs-attribute">deploy</span>:<br>  <span class="hljs-attribute">type</span>: git<br>   <span class="hljs-attribute">repo</span>: git<span class="hljs-variable">@server_ip</span>:/var/repo/hexo_static.git<br>  <span class="hljs-attribute">branch</span>: master<br></code></pre></td></tr></table></figure>
+
+<p>记得安装对应hexo部署插件</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">npm <span class="hljs-keyword">install</span> hexo-deployer-git <span class="hljs-comment">--save</span><br></code></pre></td></tr></table></figure>
+
+<p>最后在博客根目录下，git bash中运行，如下代码，生成静态文件，并上传部署。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">hexo g &amp;&amp; hexo d<br></code></pre></td></tr></table></figure>
+
+<h1 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h1><p>部署完成后，在浏览器里输入你服务器公网IP加端口号，即可访问你的博客了。(如果是默认端口号，则只要输入公网IP即可)</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">xxx</span><span class="hljs-selector-class">.xxx</span><span class="hljs-selector-class">.xxx</span><span class="hljs-selector-class">.xxx</span><span class="hljs-selector-pseudo">:8080</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://www.jianshu.com/p/271a1649a853" target="_blank" rel="noopener">简书–在 Ubuntu 服务器部署 hexo 搭建个人博客</a></p>
+<p><a href="https://www.jianshu.com/p/16b89f4f7136" target="_blank" rel="noopener">简书–用Hexo部署博客到Ubuntu服务器</a></p>
+<p><a href="https://www.liaoxuefeng.com/wiki/896043488029600/899998870925664" target="_blank" rel="noopener">廖雪峰–搭建Git服务器</a></p>
+<hr>
+<p>写文不易，如需转载，请注明出处。</p>
+<p>如果某处写的有问题，欢迎留言，一起交流讨论，共同进步。</p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/GoodNight-Git" target="_blank" rel="noopener">Github</a></li><li><a href="https://juejin.im/user/5cb1ed9b5188251b090acc5c" target="_blank" rel="noopener">掘金</a></li><li><a href="mailto:goodnightlilanhui@gmail.com">Mail</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a></li></ul></div><h2>Categories</h2><div class="sidebar__categories"><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/about/">about</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/notes/">notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/plans/">plans</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/projects/">projects</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Axios/" rel="tag">Axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding-net/" rel="tag">Coding.net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingThinking/" rel="tag">CodingThinking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Color/" rel="tag">Color</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/" rel="tag">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kali-2-0/" rel="tag">Kali 2.0</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keycloak/" rel="tag">Keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Web/" rel="tag">Python Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL-Server/" rel="tag">SQL Server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/" rel="tag">Translation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/" rel="tag">UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">Ubuntu系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VUE/" rel="tag">VUE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win10/" rel="tag">Win10</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keycloak/" rel="tag">keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/taro/" rel="tag">taro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E6%8E%A8/" rel="tag">内推</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%92%E6%AD%A6%E7%BA%AA%E9%A1%B9%E7%9B%AE/" rel="tag">寒武纪项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E7%AB%99/" rel="tag">建站</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" rel="tag">碎碎念</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2020/06/27/%E6%9C%89%E4%BD%9C%E7%94%A8%E5%9F%9F%E7%9A%84CSS-%E8%A7%A3%E5%86%B3VUE%E8%B7%AF%E7%94%B1%E8%B7%B3%E8%BD%AC%E6%A0%B7%E5%BC%8F%E9%94%99%E4%B9%B1%E9%97%AE%E9%A2%98/">有作用域的CSS:解决VUE路由跳转样式错乱问题</a><a class="next-button" href="/2020/06/26/%E4%BF%AE%E6%94%B9%E7%BD%91%E9%A1%B5%E5%AD%97%E4%BD%93-font-face/">修改网页字体「@font-face」</a></div></div></div></div><div class="footer"><span>©️2019-2020 </span><p>Designed By&nbsp;<strong><a href="https://github.com/random-yang" target="_blank" rel="noopener">RandomYang</a></strong></p><p>Changed By<strong><a href="http://www.goodnight.wiki" target="_blank" rel="noopener">GoodNight</a></strong></p><p>Powered By&nbsp;<strong><a href="https://hexo.io" target="_blank" rel="noopener">hexo</a></strong></p><p><div id="beian"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61019002001135" target="_blank" rel="noopener"><img src="../img/beian.png"><span>陕公网安备 61019002001135号&nbsp;</span></a></div><div id="tengxun"><a href="http://beian.miit.gov.cn" target="_blank" rel="noopener">陕ICP备20010639号</a></div></p></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>

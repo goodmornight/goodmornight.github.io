@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"><meta name="description" content="Qt5.12.0+OpenCV4.0配置 [ GoodNight ] "><meta name="theme-color" content="#ebc65a"><title>Qt5.12.0+OpenCV4.0配置 [ GoodNight ] </title><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/index.css"><script src="https://cdn.bootcss.com/highlight.js/9.6.0/highlight.min.js" defer></script><script src="/js/paper.js" defer></script><script src="https://www.googletagmanager.com/gtag/js?id=UA-171806323-1" async></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-171806323-1');</script><link rel="stylesheet" href="/css/tocbot.css"><script src="/js/tocbot.js" defer></script><script>window.addEventListener('DOMContentLoaded', () => {
+  tocbot.init({
+    // Where to render the table of contents.
+    tocSelector: '.toc__content',
+    // Where to grab the headings to build the table of contents.
+    contentSelector: '.article__content',
+    // Which headings to grab inside of the contentSelector element.
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    // For headings inside relative or absolute positioned containers within content.
+    hasInnerContainers: true,
+    orderedList: false,
+    collapseDepth: 2,
+  });
+})</script><link rel="preload" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.6.0/styles/github.min.css"><link rel="preload" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface&amp;display=swap"><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css"><meta name="generator" content="Hexo 4.2.1"></head><body><div class="mask-border"></div><div class="head"><div class="head__inner"><h1><a href="/">GoodNight</a></h1><p>Take A Rest</p></div></div><div class="paper-container"><div class="main"><div class="location-bar"><div class="line-1"><div class="horizontal-line" style="height: 3px"></div></div><div class="line-2"><div class="horizontal-line" style="height: 1px"></div></div><p class="text">Qt5.12.0+OpenCV4.0配置</p><div class="switch-button"><input class="container_toggle" type="checkbox" id="switch" name="mode"><label for="switch">Toggle</label></div><div class="line-3"><div class="horizontal-line" style="height: 1px"></div></div></div><div class="main__2-col"><article class="post-view__article"><div class="article__infomation"><div class="posts-item"><h2 class="posts-item__title"><a href="">Qt5.12.0+OpenCV4.0配置</a></h2><span class="post__date">2019-04-03</span><a href="/tags/Qt/"><span class="post__tags">#Qt</span></a><a href="/tags/OpenCV/"><span class="post__tags">#OpenCV</span></a></div></div><div class="article__content"><p>前段时间，我弄我的毕设，需要把Qt配置上OpenCV库实现打开摄像头、录制视频的功能。然而以前完全没学过，在网上搜索资料都是要求把OpenCV用MinGW重新编译一下才能使用。看得我一脸懵逼，编译了一晚上也没能使用。但现在我已经解决了这个问题。</p>
+<p>首先，我们之所以要将OpenCV用MinGW重新编译的原因是，我们写的Qt是用的MinGW编译器编译的，但OpenCV并不是这个编译器编译的，因此我们需要把它的二进制文件用MinGW编译过后才能调用。</p>
+<p>但编译过程很复杂，报错都不知道该如何改。因此我决定把将Qt换个编译器，我换成了MSVC2017编译器。</p>
+<p>先介绍一下我的配置：</p>
+<ul>
+<li><strong>操作系统：Windows10 64bit</strong></li>
+<li><strong>编译器：MSVC2017</strong></li>
+<li><strong>Qt版本：Qt5.12.0</strong></li>
+<li><strong>QtCreator版本：Qt Creator4.8.0</strong></li>
+<li><strong>OpenCV版本：OpenCV4.0</strong></li>
+</ul>
+<hr>
+<h1 id="安装OpenCV"><a href="#安装OpenCV" class="headerlink" title="安装OpenCV"></a>安装OpenCV</h1><ul>
+<li>去官网下载<a href="http://opencv.org/downloads.html" target="_blank" rel="noopener">OpenCV</a>，并解压到一个目录中，例如，我解压到了“C:\opencv”中。</li>
+<li>配置环境变量，在<strong>我的电脑——单击右键——属性——高级系统设置——环境变量——系统变量</strong>中，找到Path，并添加”C:\opencv\build\x64\vc15\bin”。请注意上面路径中的x64\vc15是需要根据你系统的版本自行替换的。</li>
+</ul>
+<h1 id="下载MSVC2017编译器"><a href="#下载MSVC2017编译器" class="headerlink" title="下载MSVC2017编译器"></a>下载MSVC2017编译器</h1><h2 id="if-你还没安装Qt"><a href="#if-你还没安装Qt" class="headerlink" title="if(你还没安装Qt)"></a>if(你还没安装Qt)</h2><ul>
+<li><p>你在安装的时候，在选择需要下载的组件里把MSVC2017勾上，如图，其他组件按需勾选。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic1.png?raw=true" alt=""></p>
+</li>
+</ul>
+<h2 id="else-if-你已经安装了Qt"><a href="#else-if-你已经安装了Qt" class="headerlink" title="else if(你已经安装了Qt)"></a>else if(你已经安装了Qt)</h2><ul>
+<li><p>找到你Qt安装的位置，例如我的，我的Qt就安装在“C:\Qt\Qt5.12.0”，列表里面有一个“<strong>MaintenanceTool.exe</strong>”，用这个就可以装你之前没有安装的组件。其中因为官网的下载速度过慢，我们需要添加国内的镜像来下载组件。如图：</p>
+<p>  <img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic2.png?raw=true" alt=""></p>
+</li>
+<li><p>详细过程：<strong>打开——设置——储存库——添加——输入存储库——测试——测试成功——退出设置——下一步——跳过用户名填写——添加组件——勾选MSVC2017或MSVC2015</strong>。如图：</p>
+<p>  <img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic3.png?raw=true" alt=""></p>
+<p>  <img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic4.png?raw=true" alt=""></p>
+<p>  <img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic5.png?raw=true" alt=""></p>
+<p>  <img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic6.png?raw=true" alt=""></p>
+</li>
+<li><p>存储库可以从这里选择<a href="http://download.qt.io/static/mirrorlist/" target="_blank" rel="noopener">http://download.qt.io/static/mirrorlist/</a>,找“China”的镜像，点击其中一个镜像的HTTP，以此进入如下路径：/online/qtsdkrepository/windows_x86/root/qt/ 。再把该链接，复制粘贴到添加的静态库即可。我写的是这样的：<a href="http://mirrors.ustc.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/。如图：" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/。如图：</a></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic7.png?raw=true" alt=""></p>
+</li>
+<li><p><strong>正常来说这个方法是OK的，因为我同学这样做完全可以成功，但我却出现了如下问题</strong>：</p>
+<p>  <img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic8.png?raw=true" alt=""></p>
+<ul>
+<li><p><strong>解决方法</strong>：</p>
+<ul>
+<li><p><strong>下载Updates.xml</strong>， 在中国任意的一个仓库里，例如：<a href="http://mirrors.ustc.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/，下载[Updates.xml](http://mirror.bit.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/Updates.xml)，如图：" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/，下载[Updates.xml](http://mirror.bit.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/Updates.xml)，如图：</a><br><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic9.png?raw=true" alt=""></p>
+</li>
+<li><p><strong>下载Meta文件</strong>，例如：<a href="http://mirror.bit.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/qt/，下载最新的Meta文件，如下图的[1.0.7meta.7z](http://mirror.bit.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/qt/1.0.7meta.7z)，如图：" target="_blank" rel="noopener">http://mirror.bit.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/qt/，下载最新的Meta文件，如下图的[1.0.7meta.7z](http://mirror.bit.edu.cn/qtproject/online/qtsdkrepository/windows_x86/root/qt/qt/1.0.7meta.7z)，如图：</a></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic10.png?raw=true" alt=""></p>
+</li>
+<li><p>把他俩都放在<strong>一个文件夹</strong>里，例如：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic11.png?raw=true" alt=""></p>
+</li>
+<li><p>然后回到刚刚<strong>设置</strong>那里，<strong>添加路径</strong>，如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic12.png?raw=true" alt=""></p>
+</li>
+<li><p><strong>测试成功即可正常添加组件</strong>，如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic13.png?raw=true" alt=""></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><ul>
+<li><p><strong>用Qt Creator，打开你的程序，在你的程序名上单击右键选择“添加库”——打开对话框选“外部库”——下一步——先选好”包含路径”，就是你OpenCV所解压路径的include，例如我的是“C:\opencv\opencv\build\include”——然后“库文件”，我的路径是“C:\opencv\opencv\build\x64\vc15\lib\opencv_world400.lib”——下一步——完成</strong>，如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic14.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic15.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic16.png?raw=true" alt=""></p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic17.png?raw=true" alt=""></p>
+</li>
+<li><p>然后<strong>设置编译器</strong>，如图：</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic19.png?raw=true" alt=""></p>
+</li>
+<li><p>最后“<strong>在你的程序名上单击右键——执行qmake</strong>”，如图。一般正常基本就成功了。如果你想快速验证一下自己有没有成功配置，你可以试试下面实例代码。</p>
+<p><img src="https://github.com/SPY-xxx/MyImagesOnline/blob/master/qt_opencv_study_pic18.png?raw=true" alt=""></p>
+</li>
+</ul>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;opencv2/opencv.hpp&gt;</span></span><br> <br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;<br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> cv;<br> <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span></span><br><span class="hljs-function"></span>&#123;<br>     Mat <span class="hljs-built_in">image</span> = imread(<span class="hljs-string">"D:\\test.jpg"</span>);<br>     cvNamedWindow(<span class="hljs-string">"window"</span>, CV_WINDOW_NORMAL);<br>     imshow(<span class="hljs-string">"window"</span>,<span class="hljs-built_in">image</span>);<br>     waitKey(<span class="hljs-number">0</span>);<br> &#125;<br></code></pre></td></tr></table></figure>
+
+<p>点击运行之后，如果没有任何错误，可以显示图片，那么环境安装成功。</p>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>上述操作，都为亲身经历，如果不可用，可以在评论区评论，我们一起交流解决~</p>
+<hr>
+<p>如需转载，请说明出处，谢谢！</p>
+</div></article><div class="post-view__sidebar"><div class="sidebar"><div class="tocbot"><h2>Toc</h2><div class="toc__content"></div></div><h2>Links</h2><div class="sidebar__link"><ul><li><a href="https://github.com/GoodNight-Git" target="_blank" rel="noopener">Github</a></li><li><a href="https://juejin.im/user/5cb1ed9b5188251b090acc5c" target="_blank" rel="noopener">掘金</a></li><li><a href="mailto:goodnightlilanhui@gmail.com">Mail</a></li></ul></div><h2>Archives</h2><div class="sidebar__archives"><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/">2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/">2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/">2017</a></li></ul></div><h2>Categories</h2><div class="sidebar__categories"><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/about/">about</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/notes/">notes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/plans/">plans</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/projects/">projects</a></li></ul></div><h2>Tags</h2><div class="sidebar__tags"><ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Axios/" rel="tag">Axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/" rel="tag">C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding-net/" rel="tag">Coding.net</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CodingThinking/" rel="tag">CodingThinking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Color/" rel="tag">Color</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/" rel="tag">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP/" rel="tag">HTTP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/" rel="tag">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kali-2-0/" rel="tag">Kali 2.0</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Keycloak/" rel="tag">Keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Markdown/" rel="tag">Markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/" rel="tag">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCV/" rel="tag">OpenCV</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python-Web/" rel="tag">Python Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Qt/" rel="tag">Qt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/" rel="tag">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQL-Server/" rel="tag">SQL Server</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Translation/" rel="tag">Translation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI/" rel="tag">UI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu%E7%B3%BB%E7%BB%9F/" rel="tag">Ubuntu系统</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VUE/" rel="tag">VUE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Win10/" rel="tag">Win10</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/keycloak/" rel="tag">keycloak</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/node/" rel="tag">node</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/" rel="tag">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/taro/" rel="tag">taro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81/" rel="tag">产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E6%8E%A8/" rel="tag">内推</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag">前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag">图床</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%92%E6%AD%A6%E7%BA%AA%E9%A1%B9%E7%9B%AE/" rel="tag">寒武纪项目</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E7%AB%99/" rel="tag">建站</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag">微信小程序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag">杂项</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" rel="tag">碎碎念</a></li></ul></div></div></div></div><div class="horizontal-line" style="height: 1px"></div><div class="main__bottom"><div class="pre-next"><a class="pre-button" href="/2019/04/10/SQLServer%E5%AD%A6%E4%B9%A0-1-%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%89%E8%A3%85/">SQL Server学习(1)介绍与安装</a><a class="next-button" href="/2019/04/03/%E5%85%AD%E6%B5%81%E7%A8%8B%E5%BA%8F%E5%91%98%E5%A6%82%E4%BD%95%E5%90%91%E4%B8%89%E6%B5%81%E7%9C%8B%E9%BD%90/">六流程序员如何向三流看齐</a></div></div></div></div><div class="footer"><span>©️2019-2020 </span><p>Designed By&nbsp;<strong><a href="https://github.com/random-yang" target="_blank" rel="noopener">RandomYang</a></strong></p><p>Changed By<strong><a href="http://www.goodnight.wiki" target="_blank" rel="noopener">GoodNight</a></strong></p><p>Powered By&nbsp;<strong><a href="https://hexo.io" target="_blank" rel="noopener">hexo</a></strong></p><p><div id="beian"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=61019002001135" target="_blank" rel="noopener"><img src="../img/beian.png"><span>陕公网安备 61019002001135号&nbsp;</span></a></div><div id="tengxun"><a href="http://beian.miit.gov.cn" target="_blank" rel="noopener">陕ICP备20010639号</a></div></p></div><div class="darkmode-mask" id="darkmode-mask"></div><div class="sidebar__button"></div></body></html>
